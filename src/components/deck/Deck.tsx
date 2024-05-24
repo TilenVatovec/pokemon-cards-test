@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './Deck.css';
 import { capitalizeFirstLetter } from '../utils/capitaliseFirstLetter';
+import Card from '../card/Card';
 
-interface Pokemon {
+export type Pokemon  = {
     name: string;
     image: string;
 }
@@ -57,18 +58,6 @@ function Deck({ setSelectedCard, selectedCard, change }: { setSelectedCard: (sel
        if(selectedCard === null && queue.length) setSelectedCard(queue[0].name)
     },[queue])
 
-
-
-    function handleDragStart(e: React.DragEvent<HTMLDivElement>, pokemonName: string, imgUrl: string) {
-        const combinedData = `${pokemonName},${imgUrl}`;
-        e.dataTransfer.setData("pokemonData", combinedData);
-    }
-
-    function handleDragEnd(e: React.DragEvent<HTMLDivElement>) {
-        e.dataTransfer.clearData();
-        setQueue(prevQueue => prevQueue.slice(1));
-    }
-
     const currentPokemon = queue[0]; 
 
     return (
@@ -76,15 +65,8 @@ function Deck({ setSelectedCard, selectedCard, change }: { setSelectedCard: (sel
             <div className='play-deck-container'>
                 <h1>Card Stack</h1>
                 {currentPokemon ? (
-                    <div draggable='true'
-                        onDragStart={(e) => handleDragStart(e, currentPokemon.name, currentPokemon.image)}
-                        onDragEnd={(e) => { handleDragEnd(e); }}
-                        className='play-deck'
-                        style={selectedCard === currentPokemon.name? { border: '2px solid #7B93FF', borderRadius: '8px' } : {}}
-                        onClick={() => setSelectedCard(currentPokemon.name?? null)}>
-                        <img height='100%' src={currentPokemon.image} alt={currentPokemon.name} />
-                        <h2>{capitalizeFirstLetter(currentPokemon.name)}</h2>
-                    </div>
+                    <Card pokemonName={currentPokemon.name} pokemonUrl={currentPokemon.image} selectedCard={selectedCard} setSelectedCard={setSelectedCard} setQueue={setQueue}></Card>
+          
                 ) : (
                     <p>Loading...</p>
                 )}

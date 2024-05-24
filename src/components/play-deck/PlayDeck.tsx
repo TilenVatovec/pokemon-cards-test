@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './PlayDeck.css';
 import { capitalizeFirstLetter } from '../utils/capitaliseFirstLetter';
+import Card from '../card/Card';
 
 export type Card = {
     image: string;
@@ -29,6 +30,7 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
         setChange(!change)
     }
     const pokemonName = e.dataTransfer.getData("pokemonName")
+    console.log(`🚀 ~ file: PlayDeck.tsx:33 ~ pokemonName:`, pokemonName)
     if (pokemonName !== null) {
         setData(prevData => {
             return prevData!.map((pokemon) => {
@@ -80,10 +82,7 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
 
                 <div className='play-cards' >
                     {deck2 && deck2.map((card, index) => (
-                        <div draggable key={index} className='play-card' style={selectedCard === card.name ? {border: '2px solid #7B93FF', borderRadius:'8px' }: {}}   onClick={() => {setSelectedCard(card.name)}} onDragEnd={(e) => {handleDragEnd(e)}}  onDragStart={(e) => {handleDragStart(e, card.name)}}>
-                            <img height='100%' src={card.image} alt={card.name}/>
-                            <h2>{capitalizeFirstLetter(card.name)}</h2>
-                        </div>
+                        <Card key={index} pokemonName={card.name} pokemonUrl={card.image} selectedCard={selectedCard} setSelectedCard={setSelectedCard}  isPlayDeck={true}></Card>
                     ))}
                 </div>
             </div>
