@@ -12,7 +12,7 @@ const [change, setChange] = useState(false)
     <Container>
       <Deck change={change} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
       <SelectedCard selectedCard={selectedCard}/>
-      <PlayDeck change={change} setChange={setChange}/>
+      <PlayDeck selectedCard={selectedCard} setSelectedCard={setSelectedCard} change={change} setChange={setChange}/>
     </Container>
   );
 }

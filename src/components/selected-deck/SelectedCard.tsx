@@ -24,8 +24,7 @@ function SelectedCard({selectedCard}: { selectedCard: string | null}) {
                 console.error("Failed to fetch Pokémon data:", error);
             }
         };
-
-        fetchPokemonData();
+        if (selectedCard) fetchPokemonData();
     }, [selectedCard]);
 
     return (

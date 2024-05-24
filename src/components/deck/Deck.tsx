@@ -7,13 +7,11 @@ interface Pokemon {
     image: string;
 }
 
-function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selectedCard: string | null) => void,  selectedCard: string | null , change:boolean}) {
-    const [pokemon, setPokemon] = useState<Pokemon | null>(null);
-    const [isLoading, setLoading] = useState<boolean>(false);
+function Deck({ setSelectedCard, selectedCard, change }: { setSelectedCard: (selectedCard: string | null) => void; selectedCard: string | null; change: boolean }) {
+    const [queue, setQueue] = useState<Pokemon[]>([]);
 
     useEffect(() => {
-        setLoading(true)
-        const fetchPokemon = async () => { 
+        const fetchPokemon = async () => {
             const gqlQuery = `
                 query pokemons($limit: Int, $offset: Int) {
                     pokemons(limit: $limit, offset: $offset) {
@@ -25,9 +23,10 @@ function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selecte
                 }
             `;
 
+            const offset = Math.floor(Math.random() * 500) + 1;
             const gqlVariables = {
-                limit: 1,
-                offset: Math.floor(Math.random() * 1000), // Random offset for random Pokémon
+                limit: 10,
+                offset: offset,
             };
 
             try {
@@ -43,43 +42,52 @@ function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selecte
                 });
 
                 const result = await response.json();
-                const randomPokemon = result.data.pokemons.results[0];
-                setPokemon(randomPokemon);
+                const newPokemons = result.data.pokemons.results;
+                console.log(`🚀 ~ file: Deck.tsx:46 ~ newPokemons:`, newPokemons)
+                setQueue(prevQueue => [...prevQueue,...newPokemons]);
             } catch (error) {
-                console.error('Error fetching Pokémon:', error);
-            }
-            finally {
-                setLoading(false)
-            }
+                console.error('Error fetching Pokemon:', error);
+            } 
         };
 
-        fetchPokemon();
-    }, [change]);
+       if(queue.length === 0 || queue.length === 1) fetchPokemon();
+    }, [change, queue]);
+
+    useEffect(() => {
+       if(selectedCard === null && queue.length) setSelectedCard(queue[0].name)
+    },[queue])
+
+
 
     function handleDragStart(e: React.DragEvent<HTMLDivElement>, pokemonName: string, imgUrl: string) {
         const combinedData = `${pokemonName},${imgUrl}`;
-        e.dataTransfer.setData("pokemonData", combinedData)
+        e.dataTransfer.setData("pokemonData", combinedData);
     }
+
     function handleDragEnd(e: React.DragEvent<HTMLDivElement>) {
-        e.dataTransfer.clearData()
+        e.dataTransfer.clearData();
+        setQueue(prevQueue => prevQueue.slice(1));
     }
 
-
+    const currentPokemon = queue[0]; 
 
     return (
         <div className='deck'>
             <div className='play-deck-container'>
                 <h1>Card Stack</h1>
-        
-                    {pokemon && !isLoading ? (
-                        <div draggable='true' onDragStart={(e) => handleDragStart(e, capitalizeFirstLetter(pokemon.name), pokemon.image)} onDragEnd={(e) => {handleDragEnd(e)} }  className='play-deck' onClick={() => setSelectedCard(pokemon.name ?? null)}>
-                            <img height='100%' src={pokemon.image} alt={pokemon.name} />
-                            <h2>{capitalizeFirstLetter(pokemon.name)}</h2>
-                        </div>
-                    ) : (
-                         <p>Loading...</p>
-                    )}
-             
+                {currentPokemon ? (
+                    <div draggable='true'
+                        onDragStart={(e) => handleDragStart(e, currentPokemon.name, currentPokemon.image)}
+                        onDragEnd={(e) => { handleDragEnd(e); }}
+                        className='play-deck'
+                        style={selectedCard === currentPokemon.name? { border: '2px solid #7B93FF', borderRadius: '8px' } : {}}
+                        onClick={() => setSelectedCard(currentPokemon.name?? null)}>
+                        <img height='100%' src={currentPokemon.image} alt={currentPokemon.name} />
+                        <h2>{capitalizeFirstLetter(currentPokemon.name)}</h2>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
             </div>
         </div>
     );
