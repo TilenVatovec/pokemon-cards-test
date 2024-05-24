@@ -59,7 +59,7 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
                 onChange={(e) => setTableName1(e.target.value)} 
                 type='text' 
                 value={tableName1 ?? 'Untitled Deck'} 
-                style={{color: tableName2 === null? '#BCC4CC' : 'initial'}} 
+                style={{color: tableName1 === null? '#BCC4CC' : 'initial'}} 
                 />
                 <div className='play-cards'>
                     {deck1 && deck1.map((card, index) => (
@@ -74,8 +74,8 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
             <input 
             onChange={(e) => setTableName2(e.target.value)} 
             type='text' 
-            value={tableName2?? 'Untitled Deck'} 
-            style={{color: tableName2 === null? '#BCC4CC' : 'initial'}} 
+            value={tableName2 ?? 'Untitled Deck'} 
+            style={{color: tableName2 === null? '#BCC4CC' : 'black'}} 
             />
 
                 <div className='play-cards' >
