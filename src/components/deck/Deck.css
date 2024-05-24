@@ -1,0 +1,35 @@
+.deck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 133px;
+  height: 164px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.play-deck-container {
+  box-sizing: border-box;
+  border-radius: 8px;
+  height: 100%;
+  width: auto;
+  background-color: white;
+  padding: 10px 15px 15px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-deck {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-deck img {
+  max-height: 84px;
+  object-fit: contain;
+}

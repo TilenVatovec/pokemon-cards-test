@@ -1,0 +1,44 @@
+.selected-card {
+  box-sizing: border-box;
+  width: 283px;
+  height: 350px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+}
+.selected-card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: fill;
+}
+
+.selected-card-data {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.selected-card-info-frame {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+  flex: 1;
+}
+.selected-card-info-frame-2 {
+  margin-top: 3px;
+  display: flex;
+  flex-direction: row;
+  gap: 22px;
+}
+.selected-card-type {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9px;
+  border: 1px solid rgba(243, 243, 243, 1);
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 2px 8px 3px 8px;
+}
