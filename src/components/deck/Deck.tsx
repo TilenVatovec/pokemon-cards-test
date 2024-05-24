@@ -12,8 +12,8 @@ function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selecte
     const [isLoading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const fetchPokemon = async () => {
-            setLoading(true)
+        setLoading(true)
+        const fetchPokemon = async () => { 
             const gqlQuery = `
                 query pokemons($limit: Int, $offset: Int) {
                     pokemons(limit: $limit, offset: $offset) {
@@ -71,13 +71,13 @@ function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selecte
             <div className='play-deck-container'>
                 <h1>Card Stack</h1>
         
-                    {pokemon ? (
-                        <div draggable='true' onDragStart={(e) => handleDragStart(e, pokemon.name, pokemon.image)} onDragEnd={(e) => {handleDragEnd(e)} }  className='play-deck' onClick={() => setSelectedCard(pokemon.name ?? null)}>
+                    {pokemon && !isLoading ? (
+                        <div draggable='true' onDragStart={(e) => handleDragStart(e, capitalizeFirstLetter(pokemon.name), pokemon.image)} onDragEnd={(e) => {handleDragEnd(e)} }  className='play-deck' onClick={() => setSelectedCard(pokemon.name ?? null)}>
                             <img height='100%' src={pokemon.image} alt={pokemon.name} />
                             <h2>{capitalizeFirstLetter(pokemon.name)}</h2>
                         </div>
                     ) : (
-                        isLoading && <p>Loading...</p>
+                         <p>Loading...</p>
                     )}
              
             </div>

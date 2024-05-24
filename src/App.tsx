@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import Container from './components/container/Container';
 import Deck from './components/deck/Deck';
-import PlayDeck, { Card } from './components/play-deck/PlayDeck';
+import PlayDeck from './components/play-deck/PlayDeck';
 import SelectedCard from './components/selected-deck/SelectedCard';
 
 function App() {

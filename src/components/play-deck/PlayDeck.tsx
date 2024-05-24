@@ -38,7 +38,12 @@ function PlayDeck({change, setChange}:{change: boolean, setChange:(change: boole
     return (
         <div className="play-container">
             <div className='play-card-container' onDrop={(e) => {handleDrop(e, 'deck1')}} onDragOver={handelDragOver}>
-                <input onChange={(e) => setTableName1(e.target.value)} type='text' value={tableName1 ?? 'Untitled Deck'} />
+                <input 
+                onChange={(e) => setTableName1(e.target.value)} 
+                type='text' 
+                value={tableName1 ?? 'Untitled Deck'} 
+                style={{color: tableName2 === null? '#BCC4CC' : 'initial'}} 
+                />
                 <div className='play-cards'>
                     {deck1 && deck1.map((card, index) => (
                         <div key={index} className='play-card'>

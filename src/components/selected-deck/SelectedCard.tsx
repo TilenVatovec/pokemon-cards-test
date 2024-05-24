@@ -50,7 +50,8 @@ function SelectedCard({selectedCard}: { selectedCard: string | null}) {
                     </div>
                 </>
             ) : (
-                <p>Loading...</p>
+                <div className='loading'><p>Loading...</p></div>
+        
             )}
         </div>
     );
