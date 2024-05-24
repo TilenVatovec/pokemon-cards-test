@@ -10,7 +10,7 @@ export type Card = {
 };
 
 
-function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: boolean, setChange:(change: boolean) => void, setSelectedCard:(selectedCard: string | null) => void,  selectedCard: string | null}) {
+function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: boolean, setChange:(change: boolean) => void, setSelectedCard:(selectedCard: {name:string, image:string} | null) => void,  selectedCard: {name:string, image:string} | null}) {
  const [data, setData] = useState<Card[] | null>(null)
  const [tableName1, setTableName1] = useState<string | null>(null)
  const [tableName2, setTableName2] = useState<string | null>(null)
@@ -47,13 +47,6 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
         e.preventDefault()
     }
 
-    function handleDragStart(e: React.DragEvent<HTMLDivElement>, pokemonName: string) {
-        e.dataTransfer.setData("pokemonName", pokemonName)
-    }
-    function handleDragEnd(e: React.DragEvent<HTMLDivElement>) {
-        e.dataTransfer.clearData()
-    }
-
     return (
         <div className="play-container">
             <div className='play-card-container' onDrop={(e) => {handleDrop(e, 'deck1')}} onDragOver={handelDragOver}>
@@ -65,10 +58,7 @@ function PlayDeck({change, setChange, selectedCard, setSelectedCard}:{change: bo
                 />
                 <div className='play-cards'>
                     {deck1 && deck1.map((card, index) => (
-                        <div draggable key={index} className='play-card' style={selectedCard === card.name ? {border: '2px solid #7B93FF', borderRadius:'8px' }: {}} onClick={() => {setSelectedCard(card.name)}} onDragEnd={(e) => {handleDragEnd(e)}}  onDragStart={(e) => {handleDragStart(e, card.name)}}>
-                            <img height='100%' src={card.image} alt={card.name}/>
-                            <h2>{capitalizeFirstLetter(card.name)}</h2>
-                        </div>
+                 <Card key={index} pokemonName={card.name} pokemonUrl={card.image} selectedCard={selectedCard} setSelectedCard={setSelectedCard}  isPlayDeck={true}></Card>
                     ))}
                 </div>
             </div>

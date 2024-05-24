@@ -4,8 +4,8 @@ import { capitalizeFirstLetter } from "../utils/capitaliseFirstLetter";
 type PokemonProps = {
     pokemonName: string,
     pokemonUrl: string,
-    setSelectedCard: (selectedCard: string | null) => void; 
-    selectedCard: string | null;
+    setSelectedCard: (selectedCard: { name:string, image:string } | null) => void; 
+    selectedCard: {name:string, image:string} | null
     setQueue?:React.Dispatch<React.SetStateAction<Pokemon[]>>
     isPlayDeck?: boolean
 }
@@ -35,8 +35,8 @@ function Card({pokemonName, pokemonUrl, selectedCard, setSelectedCard, setQueue,
                         onDragStart={(e) => handleDragStart(e, pokemonName, pokemonUrl)}
                         onDragEnd={(e) => { handleDragEnd(e); }}
                         className='play-deck'
-                        style={selectedCard === pokemonName ? { border: '2px solid #7B93FF', borderRadius: '8px' } : {}}
-                        onClick={() => setSelectedCard(pokemonName ?? null)}>
+                        style={selectedCard?.name === pokemonName ? { border: '2px solid #7B93FF', borderRadius: '8px' } : {}}
+                        onClick={() => {setSelectedCard({name:pokemonName ?? null, image:pokemonUrl})}}>
                         <img height='100%' src={pokemonUrl} alt={pokemonName} />
                         <h2>{capitalizeFirstLetter(pokemonName)}</h2>
                     </div>

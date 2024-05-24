@@ -8,7 +8,9 @@ export type Pokemon  = {
     image: string;
 }
 
-function Deck({ setSelectedCard, selectedCard, change }: { setSelectedCard: (selectedCard: string | null) => void; selectedCard: string | null; change: boolean }) {
+function Deck({ setSelectedCard, selectedCard, change }: 
+    { setSelectedCard: (selectedCard: { name:string, image:string } | null) => void; 
+    selectedCard: {name:string, image:string} | null; change: boolean }) {
     const [queue, setQueue] = useState<Pokemon[]>([]);
 
     useEffect(() => {
@@ -55,7 +57,10 @@ function Deck({ setSelectedCard, selectedCard, change }: { setSelectedCard: (sel
     }, [change, queue]);
 
     useEffect(() => {
-       if(selectedCard === null && queue.length) setSelectedCard(queue[0].name)
+       if(selectedCard === null && queue.length)
+        { 
+        setSelectedCard({name: queue[0].name, image: queue[0].image}) 
+    }
     },[queue])
 
     const currentPokemon = queue[0]; 
