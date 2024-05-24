@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './Deck.css';
+import { capitalizeFirstLetter } from '../utils/capitaliseFirstLetter';
 
 interface Pokemon {
     name: string;
     image: string;
 }
 
-const capitalizeFirstLetter = (str: string): string => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-const Deck: React.FC = () => {
+function Deck ({setSelectedCard, selectedCard, change}:{setSelectedCard:(selectedCard: string | null) => void,  selectedCard: string | null , change:boolean}) {
     const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+    const [isLoading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchPokemon = async () => {
+            setLoading(true)
             const gqlQuery = `
                 query pokemons($limit: Int, $offset: Int) {
                     pokemons(limit: $limit, offset: $offset) {
@@ -49,25 +48,38 @@ const Deck: React.FC = () => {
             } catch (error) {
                 console.error('Error fetching Pokémon:', error);
             }
+            finally {
+                setLoading(false)
+            }
         };
 
         fetchPokemon();
-    }, []);
+    }, [change]);
+
+    function handleDragStart(e: React.DragEvent<HTMLDivElement>, pokemonName: string, imgUrl: string) {
+        const combinedData = `${pokemonName},${imgUrl}`;
+        e.dataTransfer.setData("pokemonData", combinedData)
+    }
+    function handleDragEnd(e: React.DragEvent<HTMLDivElement>) {
+        e.dataTransfer.clearData()
+    }
+
+
 
     return (
         <div className='deck'>
             <div className='play-deck-container'>
                 <h1>Card Stack</h1>
-                <div className='play-deck'>
+        
                     {pokemon ? (
-                        <>
+                        <div draggable='true' onDragStart={(e) => handleDragStart(e, pokemon.name, pokemon.image)} onDragEnd={(e) => {handleDragEnd(e)} }  className='play-deck' onClick={() => setSelectedCard(pokemon.name ?? null)}>
                             <img height='100%' src={pokemon.image} alt={pokemon.name} />
                             <h2>{capitalizeFirstLetter(pokemon.name)}</h2>
-                        </>
+                        </div>
                     ) : (
-                        <p>Loading...</p>
+                        isLoading && <p>Loading...</p>
                     )}
-                </div>
+             
             </div>
         </div>
     );
