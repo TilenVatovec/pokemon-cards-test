@@ -14,7 +14,6 @@ function Decks({change, setChange, selectedCard, setSelectedCard}:{change: boole
 
  const deck1 = data?.filter((data) => data.status === 'deck1')
  const deck2 = data?.filter((data) => data.status === 'deck2')
- const deck3 = data?.filter((data) => data.status === 'deck3')
 
 
  function handleDrop(e: React.DragEvent<HTMLDivElement>, status: string) {
@@ -43,7 +42,6 @@ function Decks({change, setChange, selectedCard, setSelectedCard}:{change: boole
         <div className="play-container">
             <Deck deck={deck1 ?? []} status='deck1' handleDrop={handleDrop} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
             <Deck deck={deck2 ?? []} status='deck2' handleDrop={handleDrop} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
-            <Deck deck={deck3 ?? []} status='deck3' handleDrop={handleDrop} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
         </div>
     );
 }
