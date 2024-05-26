@@ -15,22 +15,44 @@ function SelectedCard({selectedCard}: { selectedCard: { name:string, image:strin
     const [isLoading, setIsLoading] = useState(false)
     
 
-    useEffect(() => {
-        const fetchPokemonData = async () => {
-            setIsLoading(true)
-            try {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${selectedCard?.name}`);
-                if (!response.ok) throw new Error("Network response was not ok");
-                const data: PokemonData = await response.json();
-                setPokemon(data);
-            } catch (error) {
-                console.error("Failed to fetch Pokémon data:", error);
-            } finally {
-                setIsLoading(false)
-            }
-        };
-        if (selectedCard) fetchPokemonData();
-    }, [selectedCard]);
+useEffect(() => {
+    const fetchPokemonData = async () => {
+        setIsLoading(true);
+        try {
+            const query = `
+                query pokemon($name: String!) {
+                    pokemon(name: $name) {
+                        id
+                        name
+                        height
+                        weight
+                        types {
+                            type {
+                            name
+                            }
+                        }
+                    }
+                }
+            `;
+            const variables = { name: selectedCard?.name || '' };
+
+            const response = await fetch('https://graphql-pokeapi.graphcdn.app/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, variables }),
+            });
+            if (!response.ok) throw new Error("Network response was not ok");
+            const data = await response.json();
+            setPokemon(data.data.pokemon);
+        } catch (error) {
+            console.error("Failed to fetch Pokémon data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    if (selectedCard) fetchPokemonData();
+}, [selectedCard]);
+
 
     return (
         <div className='selected-card'>

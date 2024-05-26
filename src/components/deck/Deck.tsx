@@ -46,7 +46,6 @@ function Deck({ setSelectedCard, selectedCard, change }:
 
                 const result = await response.json();
                 const newPokemons = result.data.pokemons.results;
-                console.log(`🚀 ~ file: Deck.tsx:46 ~ newPokemons:`, newPokemons)
                 setQueue(prevQueue => [...prevQueue,...newPokemons]);
             } catch (error) {
                 console.error('Error fetching Pokemon:', error);
