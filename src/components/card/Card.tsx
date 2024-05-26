@@ -1,4 +1,4 @@
-import { Pokemon } from "../deck/Deck";
+import { Pokemon } from "../new-card-stack/NewCardStack";
 import { capitalizeFirstLetter } from "../utils/capitaliseFirstLetter";
 
 type PokemonProps = {

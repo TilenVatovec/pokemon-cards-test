@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import Container from './components/container/Container';
-import Deck from './components/deck/Deck';
-import PlayDeck from './components/play-deck/PlayDeck';
+import NewCardStack from './components/new-card-stack/NewCardStack';
+import Decks from './components/decks/Decks';
 import SelectedCard from './components/selected-deck/SelectedCard';
 
 function App() {
@@ -13,9 +13,9 @@ const [change, setChange] = useState(false)
 
   return (
     <Container>
-      <Deck  change={change} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
+      <NewCardStack  change={change} selectedCard={selectedCard} setSelectedCard={setSelectedCard} />
       <SelectedCard  selectedCard={selectedCard}/>
-      <PlayDeck selectedCard={selectedCard} setSelectedCard={setSelectedCard} change={change} setChange={setChange}/>
+      <Decks selectedCard={selectedCard} setSelectedCard={setSelectedCard} change={change} setChange={setChange}/>
     </Container>
   );
 }

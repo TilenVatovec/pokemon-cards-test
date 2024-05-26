@@ -1,82 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import './Deck.css';
-import { capitalizeFirstLetter } from '../utils/capitaliseFirstLetter';
-import Card from '../card/Card';
+import { useState } from "react";
+import { PokeDeck } from "../decks/Decks";
+import Card from "../card/Card";
 
-export type Pokemon  = {
-    name: string;
-    image: string;
+
+type DeckProps = {
+    handleDrop:(e:React.DragEvent<HTMLDivElement>, status: string ) => void;
+    status: string
+    deck: PokeDeck[];
+    setSelectedCard: (selectedCard: { name:string, image:string } | null) => void; 
+    selectedCard: {name:string, image:string} | null;
 }
 
-function Deck({ setSelectedCard, selectedCard, change }: 
-    { setSelectedCard: (selectedCard: { name:string, image:string } | null) => void; 
-    selectedCard: {name:string, image:string} | null; change: boolean }) {
-    const [queue, setQueue] = useState<Pokemon[]>([]);
 
-    useEffect(() => {
-        const fetchPokemon = async () => {
-            const gqlQuery = `
-                query pokemons($limit: Int, $offset: Int) {
-                    pokemons(limit: $limit, offset: $offset) {
-                        results {
-                            name
-                            image
-                        }
-                    }
-                }
-            `;
 
-            const offset = Math.floor(Math.random() * 500) + 1;
-            const gqlVariables = {
-                limit: 10,
-                offset: offset,
-            };
+function Deck({deck, handleDrop, status, setSelectedCard, selectedCard}: DeckProps) {
+    const [tableName, setTableName] = useState<string | null>(null)
 
-            try {
-                const response = await fetch('https://graphql-pokeapi.graphcdn.app/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query: gqlQuery,
-                        variables: gqlVariables,
-                    }),
-                });
-
-                const result = await response.json();
-                const newPokemons = result.data.pokemons.results;
-                setQueue(prevQueue => [...prevQueue,...newPokemons]);
-            } catch (error) {
-                console.error('Error fetching Pokemon:', error);
-            } 
-        };
-
-       if(queue.length === 0 || queue.length === 1) fetchPokemon();
-    }, [change, queue]);
-
-    useEffect(() => {
-       if(selectedCard === null && queue.length)
-        { 
-        setSelectedCard({name: queue[0].name, image: queue[0].image}) 
+    function handelDragOver(e: React.DragEvent<HTMLDivElement>) {
+        e.preventDefault()
     }
-    },[queue])
-
-    const currentPokemon = queue[0]; 
-
-    return (
-        <div className='deck'>
-            <div className='play-deck-container'>
-                <h1>Card Stack</h1>
-                {currentPokemon ? (
-                    <Card pokemonName={currentPokemon.name} pokemonUrl={currentPokemon.image} selectedCard={selectedCard} setSelectedCard={setSelectedCard} setQueue={setQueue}></Card>
-          
-                ) : (
-                    <p>Loading...</p>
-                )}
+    
+    return  (
+        <div  className='play-card-container' onDrop={(e) => handleDrop(e, status)} onDragOver={handelDragOver}>
+            <input 
+            onChange={(e) => setTableName(e.target.value)} 
+            type='text' 
+            value={tableName ?? 'Untitled Deck'} 
+            style={{color: tableName === null? '#BCC4CC' : 'black'}} 
+            />
+            <div className='play-cards' >
+                {deck && deck.map((card, index) => (
+                    <Card key={index} pokemonName={card.name} pokemonUrl={card.image} selectedCard={selectedCard} setSelectedCard={setSelectedCard}  isPlayDeck={true}></Card>
+                ))}
             </div>
         </div>
-    );
-};
+)
+}
 
 export default Deck;
