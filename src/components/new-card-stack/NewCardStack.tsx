@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './NewCardStack.css';
-import { capitalizeFirstLetter } from '../utils/capitaliseFirstLetter';
 import Card from '../card/Card';
 
 export type Pokemon  = {

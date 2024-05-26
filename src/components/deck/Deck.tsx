@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PokeDeck } from "../decks/Decks";
 import Card from "../card/Card";
+import './Deck.css';
 
 
 type DeckProps = {
